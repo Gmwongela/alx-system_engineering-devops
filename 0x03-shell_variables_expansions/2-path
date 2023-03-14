@@ -1,2 +1,2 @@
 #!/bin/bash
-expart PATH=$PATH:/action
+PATH=$PATH:/usr/bin:/sbin:/bin
