@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Define the new IP addresses
+new_localhost_ip="127.0.0.2"
+new_facebook_ip="8.8.8.8"
+
+# Update /etc/hosts to change IP address mappings
+sudo sed -i "s/127\.0\.0\.1[[:space:]]*localhost/127.0.0.1 localhost\n$new_localhost_ip localhost/g" /etc/hosts
+sudo sed -i "s/facebook\.com[[:space:]]*[0-9.]*[0-9]*\.[0-9]*[0-9]*[0-9]*/facebook.com $new_facebook_ip/g" /etc/hosts
+
+# Flush DNS cache
+sudo systemd-resolve --flush-caches
