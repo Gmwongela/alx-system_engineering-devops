@@ -1,13 +1,3 @@
 #!/usr/bin/env bash
-
-# Use 'ip' command to get the list of network interfaces and their IP addresses
-ip_output=$(ip -4 addr)
-
-# Use 'grep' to filter out lines containing the IP addresses
-ipv4_lines=$(echo "$ip_output" | grep -oE 'inet ([0-9]{1,3}\.){3}[0-9]{1,3}')
-
-# Use 'awk' to extract the IP addresses from the filtered lines
-ipv4_addresses=$(echo "$ipv4_lines" | awk '{print $2}')
-
-# Display the list of active IPv4 addresses
-echo "$ipv4_addresses"
+# bash script to display active IP
+ifconfig | grep "inet " | tr ":" " " | awk '{print $3}'
