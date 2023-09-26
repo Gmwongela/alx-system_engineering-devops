@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Update the package repository and install Nginx
+apt-get update
+apt-get -y install nginx
+
+# Create a simple HTML file with "Hello World!" content
+echo "Hello World!" > /usr/share/nginx/html/index.html
+
+# Check if Nginx is running and start it if not
+if ! pgrep -x "nginx" > /dev/null; then
+    service nginx start
+fi
+
+# Check if Nginx is listening on port 80
+if ! (netstat -tuln | grep -q ':80\s'); then
+    echo "Nginx is not listening on port 80. Please check the configuration."
+    exit 1
+fi
+
+# Test Nginx by querying it with curl
+if ! curl -s http://localhost | grep -q "Hello World!"; then
+    echo "Nginx did not return the expected 'Hello World!' content. Please check the configuration."
+    exit 1
+fi
+
+# Script execution completed successfully
+echo "Nginx installation and configuration completed successfully."
