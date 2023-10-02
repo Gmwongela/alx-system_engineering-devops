@@ -1,31 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Script that configures a new Ubuntu machine to respect above requirements
 
-# Check if Nginx is installed
-if ! command -v nginx &>/dev/null; then
-    echo "Nginx is not installed. Please install Nginx first."
-    exit 1
-fi
+sudo apt-get update
+sudo apt-get install -y nginx
 
-# Create a new Nginx configuration file for the redirection
-echo "server {
-    listen 80;
-    server_name _;
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-}" > /etc/nginx/sites-available/redirect_me
+echo "Hello World!" | sudo tee /var/www/html/index.html
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.blog.ehoneahobed.com permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
-# Create a symbolic link to enable the configuration
-ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
-
-# Test Nginx configuration for syntax errors
-if ! nginx -t; then
-    echo "Nginx configuration test failed. Please check the configuration files."
-    exit 1
-fi
-
-# Reload Nginx to apply the new configuration
-systemctl reload nginx
-
-# Script execution completed successfully
-echo "Nginx redirection configuration completed successfully."
+sudo service nginx restart
