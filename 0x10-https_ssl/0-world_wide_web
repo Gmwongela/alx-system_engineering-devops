@@ -1,29 +1,21 @@
 #!/usr/bin/env bash
-
 # Function to display DNS information for a subdomain
-get_dns_info() {
-  subdomain="$1"
-  domain="$2"
 
-  # Use dig to retrieve DNS information for the subdomain
-  dns_output=$(dig "$subdomain.$domain" +short)
+function audit_subdomain {
+	local domain="$1"
+	local subdomain="$2"
 
-  # Check if the output is empty (subdomain doesn't exist)
-  if [ -z "$dns_output" ]; then
-    echo "The subdomain $subdomain does not exist."
-  else
-    record_type=$(dig "$subdomain.$domain" | awk '/ANSWER SECTION/ {getline; print $4}')
-    echo "The subdomain $subdomain is a $record_type record and points to $dns_output"
-  fi
+	if [ -z "$subdomain" ]; then
+		subdomains=("www" "lb-01" "web-01" "web-02")
+	else
+		subdomains=("$subdomain")
+	fi
+
+	for sub in "$(subdomains [0])"; do
+		record_type=$ (dig "$sub.$domain" | awk '/ANSWER SECTION/ (getline; print $4 )')
+		destinations=$ (dig "sub.$domain" | awk '/ANSWER SECTION/ (GETLINE; print $5 )')
+		echo "The subdomain $sub is a $record_type record and points to $destination"
+	done
 }
 
-# Check if both domain and subdomain are provided as arguments
-if [ $# -eq 2 ]; then
-  get_dns_info "$2" "$1"
-else
-  # Display information for default subdomains www, lb-01, web-01, and web-02
-  get_dns_info "www" "$1"
-  get_dns_info "lb-01" "$1"
-  get_dns_info "web-01" "$1"
-  get_dns_info "web-02" "$1"
-fi
+audit_subdomain "$1" "$2"
