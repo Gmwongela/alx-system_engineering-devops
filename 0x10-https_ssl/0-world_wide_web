@@ -2,20 +2,20 @@
 # Function to display DNS information for a subdomain
 
 function audit_subdomain {
-	local domain="$1"
-	local subdomain="$2"
+        local domain="$1"
+        local subdomain="$2"
 
-	if [ -z "$subdomain" ]; then
-		subdomains=("www" "lb-01" "web-01" "web-02")
-	else
-		subdomains=("$subdomain")
-	fi
+        if [ -z "$subdomain" ]; then
+                subdomains=("www" "lb-01" "web-01" "web-02")
+        else
+                subdomains=("$subdomain")
+        fi
 
-	for sub in "$(subdomains [0])"; do
-		record_type=$ (dig "$sub.$domain" | awk '/ANSWER SECTION/ (getline; print $4 )')
-		destinations=$ (dig "sub.$domain" | awk '/ANSWER SECTION/ (GETLINE; print $5 )')
-		echo "The subdomain $sub is a $record_type record and points to $destination"
-	done
+        for sub in "$(subdomains [0])"; do
+                record_type=$ (dig "$sub.$domain" | awk '/ANSWER SECTION/ (getline; print $4 )')
+                destinations=$ (dig "sub.$domain" | awk '/ANSWER SECTION/ (GETLINE; print $5 )')
+                echo "The subdomain $sub is a $record_type record and points to $destination"
+        done
 }
 
 audit_subdomain "$1" "$2"
