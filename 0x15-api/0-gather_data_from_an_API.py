@@ -1,47 +1,37 @@
 #!/usr/bin/python3
-import requests
-import sys
 
-def gather_data(employee_id):
-    # Define the actual API endpoint using the provided base URL
-    base_url = "https://jsonplaceholder.typicode.com/"
-    endpoint = f"users/{employee_id}"
-    url = base_url + endpoint
+"""
+Python script that, using a REST API, for a given employee
+ID, returns information about his/her TODO list progress
+"""
 
-    try:
-        # Make a GET request to the API
-        response = requests.get(url)
+from requests import get
+from sys import argv
 
-        # Check if the response status code is 200 (OK)
-        if response.status_code == 200:
-            # Parse the JSON response
-            data = response.json()
-
-            # Extract relevant information
-            employee_name = data['name']
-            # Get the employee's TODO list
-            todo_list_url = base_url + f"todos?userId={employee_id}"
-            todo_list_response = requests.get(todo_list_url)
-            todo_list = todo_list_response.json()
-            total_tasks = len(todo_list)
-            completed_tasks = sum(1 for task in todo_list if task['completed'])
-
-            # Print the information in the specified format
-            print(f"Employee {employee_name} is done with tasks({completed_tasks}/{total_tasks}):")
-            for task in todo_list:
-                if task['completed']:
-                    print(f"    {task['title']}")
-
-        else:
-            print("Error: Unable to fetch data from the API")
-
-    except requests.exceptions.RequestException as e:
-        print(f"Request Exception: {e}")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
-        sys.exit(1)
+    response = get('https://jsonplaceholder.typicode.com/todos/')
+    data = response.json()
+    completed = 0
+    total = 0
+    tasks = []
+    response2 = get('https://jsonplaceholder.typicode.com/users')
+    data2 = response2.json()
 
-    employee_id = sys.argv[1]
-    gather_data(employee_id)
+    for i in data2:
+        if i.get('id') == int(argv[1]):
+            employee = i.get('name')
+
+    for i in data:
+        if i.get('userId') == int(argv[1]):
+            total += 1
+
+            if i.get('completed') is True:
+                completed += 1
+                tasks.append(i.get('title'))
+
+    print("Employee {} is done with tasks({}/{}):".format(employee, completed,
+                                                          total))
+
+    for i in tasks:
+        print("\t {}".format(i))
