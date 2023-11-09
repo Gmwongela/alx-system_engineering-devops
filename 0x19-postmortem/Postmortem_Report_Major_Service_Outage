@@ -1,0 +1,40 @@
+Postmortem Report: Major Service Outage
+Issue Summary:
+Duration: 
+  Start Time: November 22, 2023, 15:00 UTC  
+  End Time: November 22, 2023, 18:30 UTC  
+Impact:  
+The core web application service was completely down for 3.5 hours, affecting 80% of users. Users experienced complete unavailability of the service, resulting in service errors and timeouts.
+Root Cause: 
+A misconfigured server update caused a critical application service to fail due to an unexpected setting change.
+Timeline:
+Issue Detected:  
+November 22, 2023, 15:00 UTC. The incident was detected via monitoring alerts indicating a sudden spike in error rates.
+Actions Taken:  
+Initially, the network and infrastructure were investigated assuming a probable server overload. Upon further inspection, it was determined to be a software-related issue.
+Misleading Investigation: 
+Initial investigation was focused on potential DDoS attacks or server resource constraints, leading to temporary misdirection.
+Escalation: 
+The incident was escalated to the DevOps and System Engineering teams to investigate and resolve the application error.
+Resolution: 
+The issue was resolved by rolling back the recent server configuration changes to the previous stable version, followed by extensive testing to ensure service stability.
+Root Cause and Resolution:
+Root Cause: 
+A recent server update introduced an unintended configuration change in the application settings, causing critical components to fail, resulting in service unavailability.
+Resolution: 
+The issue was resolved by reverting the server configuration changes back to the last known stable version. A rigorous testing phase was undertaken to verify the service stability.
+Corrective and Preventative Measures:
+Improvements: 
+  - Implementation of more stringent pre-deployment testing protocols.
+  - Enforcing version control and robust change management strategies.
+Specific Tasks for Resolution:
+  - Implement automated rollback procedures for configuration changes.
+  - Enhance monitoring alerts to specifically detect critical application service failures.
+  - Conduct team-wide training sessions to ensure familiarity with incident response protocols and escalation procedures.
+Additional Details:
+The service outage stemmed from an unintended server configuration change that was introduced during routine maintenance. This incident underlines the criticality of thorough pre-deployment testing and the importance of well-documented change control procedures.
+The root cause was promptly identified, and a rollback procedure was efficiently executed, restoring the service's functionality. Following this incident, a thorough review and refinement of our change management processes and deployment procedures will be conducted to prevent similar incidents in the future.
+We recognize the inconvenience this outage caused and assure our users that we're committed to enhancing our system reliability and minimizing service disruptions.
+The aim of this postmortem is to transparently communicate the details of the outage, its root cause, and the steps taken to resolve the issue. We are dedicated to learning from this incident and implementing measures to prevent similar issues in the future.
+For a detailed technical analysis and diagrams, please refer to our GitHub repository [here](https://github.com/username/alx-system_engineering-devops/0x19-postmortem).
+
